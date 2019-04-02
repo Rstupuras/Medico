@@ -1,0 +1,75 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Pat.PrescriptionsModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Prescriptions";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if (Model.Prescriptions.Count == 0)
+    {
+        <h1 class="display-4">There are no prescriptions</h1>
+    }
+    else
+    {
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Medicament
+                    </th>
+                    <th>
+                        Doctor
+                    </th>
+                    <th>
+                        Date from
+                    </th>
+                    <th>
+                        Date to
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Prescriptions)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Medicament.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTimeFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTimeTo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+</div>

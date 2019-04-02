@@ -1,0 +1,73 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Doc.AppointmentsModel
+@{
+Layout = "_Layout";
+}
+@{
+ViewData["Title"] = "My appointments";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if(Model.appointmentsToday.Count == 0)
+    {
+        <h1 class="display-4">There is no appointments today</h1>
+    }
+    else
+    {
+        <table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Patient Name
+            </th>
+            <th>
+                Reason/Cause
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Is Viewed
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.appointmentsToday)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reason)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsViewed)
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-page="./Appointments/view" asp-route-id="@item.ID">View</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table> 
+    }
+      
+    
+</div>

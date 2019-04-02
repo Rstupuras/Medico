@@ -1,0 +1,136 @@
+@page "{id:int?}"
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Doc.Appointments.ViewModel
+@{
+    Layout = "_Layout";
+}
+
+@{
+    ViewData["Title"] = "Appointment";
+}
+
+@if (@Model.appointment == null)
+{
+    Response.Redirect("/Doc/Appointments/Error");
+}
+else
+{
+    <div class="card ml-5 mr-5">
+        @if (ViewData["Message"] != null)
+        {
+            <h6 class="text-center mt-3"> @ViewData["Message"]</h6>
+        }
+        <div class="card-body m-2">
+            <form class="form" role="form" method="Post" asp-page-handler="Appointment">
+                <h6 class="card-title">ID:</h6>
+                <p class="card-text">@Model.appointment.ID</p>
+                <h6 class="card-title">NAME:</h6>
+                <p class="card-text">@Model.appointment.Patient.Name</p>
+                <h6 class="card-title">PATIENT MAIN DOCTOR:</h6>
+                <p class="card-text">@Model.appointment.Patient.MainDoctor.Name</p>
+                <h6 class="card-title">DATE:</h6>
+                <p class="card-text">@Model.appointment.DateTime.ToString("dd-MM-yyyy HH:mm")</p>
+                <h6 class="card-title">REASON:</h6>
+                <p class="card-text">@Model.appointment.Reason</p>
+                <h6 class="card-title">SUMMARY:</h6>
+                @Html.TextAreaFor(item => item.appointment.Summary, new { @class = "form-control", @id = "Summary", @name = "Summary", @type = "Summary", @required= "required" })
+
+                <div class="text-center">
+                    <div class="btn-group mt-4">
+                        <button type="button" data-toggle="modal" title="Give patient prescription" data-target="#giveModal" class="btn btn-outline-primary col-sm-4">GIVE</button>
+                        <button type="button" data-toggle="modal" title="Book patient to appointment" data-target="#bookModal" class="btn btn-outline-primary col-sm-4">BOOK TO</button>
+                        <button asp-page-handler="Appointment" title="Save appointment" class="btn btn-outline-primary col-sm-4">SAVE</button>
+                        <a href="/Doc/Appointments" title="Back to appointments" class="btn btn-outline-primary col-sm-4">BACK</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" asp-page-handler="GivePrescription">
+        <div class="modal fade" id="giveModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Give prescription to @Model.appointment.Patient.Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label asp-for="prescription.DateTimeFrom" class="control-label"></label>
+                            <input asp-for="prescription.DateTimeFrom" asp-format="{0:d}" class="form-control" required="required" />
+
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="prescription.DateTimeTo" class="control-label"></label>
+                            <input asp-for="prescription.DateTimeTo" asp-format="{0:d}" class="form-control" required="required" />
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="prescription.Medicament" class="control-label"></label>
+                            <select asp-for="prescription.Medicament.Name" class="form-control" required="required"
+                                    asp-items="@Model.medicaments">
+                                <option value="">-- Select Medicament --</option>
+                            </select>
+                            <span asp-validation-for="prescription.Medicament" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="prescription.Description" class="control-label"></label>
+                            <input asp-for="prescription.Description" asp-format="{0:d}" class="form-control" required="required" />
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" asp-page-handler="GivePrescription">Give</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <form method="post" asp-page-handler="BookAppointment">
+        <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Book appointment for @Model.appointment.Patient.Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label asp-for="newAppointment.DateTime" class="control-label"></label>
+                            <input asp-for="newAppointment.DateTime" class="form-control" required="required" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="newAppointment.Doctor" class="control-label"></label>
+                            <select asp-for="newAppointment.Doctor.Name" class="form-control" required="required"
+                                    asp-items="@Model.doctors">
+                                <option value="">-- Select Doctor --</option>
+                            </select>
+                            <span asp-validation-for="newAppointment.Doctor" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="newAppointment.Reason" class="control-label"></label>
+                            <input asp-for="newAppointment.Reason" class="form-control" required="required" />
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" asp-page-handler="BookAppointment">Book</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+}

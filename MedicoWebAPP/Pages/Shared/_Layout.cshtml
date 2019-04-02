@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MedicoWebAPP</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+            asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="sr-only"
+            asp-fallback-test-property="position" asp-fallback-test-value="absolute" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
+    </environment>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+</head>
+
+<body style="background-color:#e9ecef">
+    <header>
+        @if (User.Identity.IsAuthenticated)
+        {
+            @if ((await AuthorizationService.AuthorizeAsync(User, "mustbedoctor")).Succeeded)
+            {
+                <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+                    <img class="navbar-brand p-0" href="/index" src="~/images/medicoheaderlogo.png" alt="" height="30">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Doc/Appointments/">My appoinments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Doc/AppointmentHistory">Appointment history</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Doc/ActivePrescriptions/">Active prescirptions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Doc/Prescriptions/">All prescirptions</a>
+                            </li>
+
+                        </ul>
+                        <div class="pull-right">
+                            <form method="post" asp-page-handler="Logout">
+
+                                <button class="btn btn-light" type="submit" asp-page-handler="Logout"><i class="fas fa-sign-out-alt"></i></button>
+
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, "mustbepatient")).Succeeded)
+            {
+                <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+                    <img class="navbar-brand p-0" href="/index" src="~/images/medicoheaderlogo.png" alt="" height="30">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Pat/Appointments/">Upcoming appoinments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Pat/AppointmentHistory">Appointment history</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Pat/Prescriptions">Prescriptions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Pat/Orders">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Pat/Medicaments">Medicaments</a>
+                            </li>
+
+                        </ul>
+                        <div class="pull-right btn-group">
+
+                            <a class="btn btn-light" href="/Pat/Order"><i class="fas fa-shopping-cart"></i></a>
+                            <form method="post" asp-page-handler="Logout">
+                                <button class="btn btn-light" type="submit" asp-page-handler="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, "mustbeadmin")).Succeeded)
+            {
+                <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+                    <img class="navbar-brand p-0" href="/index" src="~/images/medicoheaderlogo.png" alt="" height="30">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Adm/Doctors/">Doctors</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-light" href="/Adm/CreateDoctor">Create Doctor</a>
+                            </li>
+
+                        </ul>
+                        <div class="pull-right btn-group">
+                            <form method="post" asp-page-handler="Logout">
+                                <button class="btn btn-light" type="submit" asp-page-handler="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
+            }
+
+        }
+        else
+        {
+            <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light mb-0">
+                <img class="navbar-brand p-0" href="/index" src="~/images/medicoheaderlogo.png" alt="" height="30">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="btn btn-light" href="/">Home</a>
+                        </li>
+                    </ul>
+                    <a class="btn btn-light my-2 my-sm-0 mr-2" asp-area="" asp-page="/Login/Doctor">Login Doctor</a>
+                    <a class="btn btn-light my-2 my-sm-0 mr-2" asp-area="" asp-page="/Login/Patient">Login Patient</a>
+                    <a class="btn btn-light my-2 my-sm-0 mr-2" asp-area="" asp-page="/Register">Sign Up</a>
+                </div>
+            </nav>
+        }
+    </header>
+
+
+    <div class="jumbotron jumbotron-fluid  mb-0 pb-0 mt-0" style="height:100vh auto">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer mt-0 text-muted bg-light">
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="container">
+                &copy; 2018 - MedicoWebAPP
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                &copy; 2018 - MedicoWebAPP <a asp-area="" asp-page="/Login/Admin">Admin</a>
+            </div>
+        }
+    </footer>
+
+
+
+    <environment include="Development">
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous" integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
+        </script>
+
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

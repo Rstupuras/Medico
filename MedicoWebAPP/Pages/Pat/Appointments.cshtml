@@ -1,0 +1,71 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Pat.AppointmentsModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "My appointments";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if (Model.UpcomingAppointments.Count == 0)
+    {
+        <h1 class="display-4">There are no upcoming appointments</h1>
+    }
+    else
+    {
+        <a class="btn btn-primary mb-3 mr-3 float-left" asp-page="/Pat/BookAppointment">Book new appointment</a>
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Doctor Name
+                    </th>
+                    <th>
+                        Reason/Cause
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.UpcomingAppointments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Doctor.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reason)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateTime)
+                        </td>
+                        <td>
+                            <form asp-page-handler="DeleteAppointment" method="post">
+                                <button type="submit" class="btn btn-primary" name="id" value=@item.ID>Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+</div>

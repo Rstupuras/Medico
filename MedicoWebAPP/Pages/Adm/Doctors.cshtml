@@ -1,0 +1,87 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Adm.DoctorsModel;
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"]
+        </div>
+    }
+    @if (ViewData["Error"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewData["Error"]
+        </div>
+    }
+    @if (Model.doctors.Count == 0)
+    {
+        <h1 class="display-4">There is no doctors</h1>
+    }
+    else
+    {
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Phone number
+                    </th>
+                    <th>
+                        Is Admin
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.doctors)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsAdmin)
+                        </td>
+                        <td>
+                            <form method="post" asp-page-handler="DeleteDoctor">
+                                <button class="btn btn-primary" name="id" type="submit" asp-page-handler="DeleteDoctor" value="@item.ID">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+</div>

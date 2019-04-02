@@ -1,0 +1,76 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Doc.AppointmentHistoryModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Appointment history";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if (Model.Appointments.Count == 0)
+    {
+        <h1 class="display-4">There are no  appointments</h1>
+    }
+    else
+    {
+       
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Patient Name
+                    </th>
+                    <th>
+                        Reason/Cause
+                    </th>
+                    <th>
+                        Summary
+                    </th>
+                    <th>
+                        Is Viewed
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Appointments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Patient.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reason)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Summary)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsViewed)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateTime)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+</div>

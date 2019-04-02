@@ -1,0 +1,56 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Pat.MedicamentsModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Medicaments";
+}
+@if (ViewData["Message"] != null)
+{
+    <h6 class="text-center mt-3"> @ViewData["Message"]</h6>
+}
+
+    <div class="card-columns m-5 mt-3 " style="column-count : 4">
+        @foreach (var medicament in Model.medicaments)
+        {
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-center">@medicament.Name</h5>
+                    <p class="card-text">@medicament.Description</p>
+                    @if (medicament.IsPrescribed == true)
+                    {
+                        <p class="card-text mt-0 mb-0">
+                            <small class="text-muted">
+                                Medicament is prescribed
+                            </small>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text mt-0 mb-0">
+                            <small class="text-muted">
+                                Medicament is not prescribed
+                            </small>
+                        </p>
+                    }
+                
+                    <p class="card-text font-weight-bold mt-0 mb-0">$@medicament.Price</p>
+
+
+
+                    <form asp-page-handler="AddToOrder" method="post">
+                        <button type="submit" class="btn btn-primary mt-2 mb-2" name="id" value=@medicament.ID>Add to order</button>
+                    </form>
+                    
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+
+

@@ -1,0 +1,64 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Adm.CreateDoctorModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Create doctor";
+}
+
+
+
+<div class="container shadow p-5 bg-light rounded mt-3">
+    <h1 class="display-4 border-bottom">Fill out all fields to create new doctor</h1>
+    @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            @Html.ValidationSummary(true, "Errors:")
+        </div>
+    }
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"]
+        </div>
+    }
+    <form method="post" asp-page-handler="CreateDoctor">
+        <div class="form-group">
+            <label asp-for="doctor.Name" class="control-label"></label>
+            <input asp-for="doctor.Name" class="form-control" required="required" />
+        </div>
+        <div class="form-group">
+            <label asp-for="doctor.Email" class="control-label"></label>
+            <input asp-for="doctor.Email" class="form-control" required="required" />
+        </div>
+        <div class="form-group">
+            <label asp-for="doctor.PhoneNumber" class="control-label"></label>
+            <input asp-for="doctor.PhoneNumber" class="form-control" required="required" />
+        </div>
+        <div class="form-group">
+            <label asp-for="doctor.Username" class="control-label"></label>
+            <input asp-for="doctor.Username" class="form-control" required="required" />
+
+        </div>
+
+        <div class="form-group ">
+            <label asp-for="doctor.Password" class="control-label"></label>
+            <input asp-for="doctor.Password" type="password" class="form-control" required="required" />
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+
+                <input asp-for="doctor.IsAdmin" type="checkbox" class="form-check-input" />
+                <label asp-for="doctor.IsAdmin" class="form-check-label"></label>
+            </div>
+        </div>
+        <div class="form-group ">
+            <button type="submit" class="btn btn-primary btn-lg" asp-page-handler="CreateDoctor">Create doctor</button>
+        </div>
+    </form>
+
+
+</div>

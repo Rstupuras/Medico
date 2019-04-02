@@ -1,0 +1,53 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model IndexModel
+@{
+Layout = "_Layout";
+}
+@{
+ViewData["Title"] = "Home page";
+}
+
+
+<div class="text-center">
+    @if (User.Identity.IsAuthenticated)
+    {
+        @if ((await AuthorizationService.AuthorizeAsync(User, "mustbedoctor")).Succeeded)
+        {
+            string app = "appoinment";
+            var count = 0;
+            <h1 class="display-4">Welcome @Model.doctor.Name</h1>
+
+            @foreach (Appointment appointment in @Model.appointments)
+            {
+                if (appointment.DateTime.Day == @DateTime.Now.Day && appointment.DateTime.Month == @DateTime.Now.Month &&
+                    appointment.DateTime.Year == @DateTime.Now.Year)
+                {
+                    count++;
+                }
+
+            }
+            @if (count > 1 || count == 0)
+            {
+                app = "appointments";
+            }
+            <h1 class="display-4">You have @count @app today</h1>
+
+
+        }
+        if ((await AuthorizationService.AuthorizeAsync(User, "mustbepatient")).Succeeded)
+        {
+            <h1 class="display-4">Welcome @Model.patient.Name</h1>
+            <a class="btn btn-primary mb-3 mr-3" asp-page="/Pat/BookAppointment">Book new appointment</a>
+        }
+        if ((await AuthorizationService.AuthorizeAsync(User, "mustbeadmin")).Succeeded)
+        {
+            <h1 class="display-4">Welcome Administrator</h1>
+        }
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+    }
+</div>

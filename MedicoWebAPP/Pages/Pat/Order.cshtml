@@ -1,0 +1,77 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Pat.OrderModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Order";
+}
+
+<div class="text-center ml-5 mr-5">
+    @if (Model.order.ID == 0 || Model.order.Items.Count == 0)
+    {
+        <h1 class="display-4">Order is empty</h1>
+        @if (ViewData["Message"] != null)
+        {
+            <h6 class="text-center mt-3"> @ViewData["Message"]</h6>
+        }
+    }
+    else
+    {
+        double total = 0;
+        @if (ViewData["Message"] != null)
+        {
+            <h6 class="text-center mt-3"> @ViewData["Message"]</h6>
+        }
+        <table class="table border-0 align-middle">
+
+            <tbody class="border-0 align-middle">
+                @foreach (var item in Model.order.Items)
+                {
+                    <tr class="border-0 align-middle">
+                        <td class="border-0">
+                            <form asp-page-handler="DeleteItem" method="post">
+                                <button type="submit" id="id" name="id" value="@item.ID" class="btn btn-light"><i class="fas fa-minus"></i></button>
+                            </form>
+                        </td>
+                        <td class="border-0 align-middle">
+                            @Html.DisplayFor(modelItem => item.Medicament.Name)
+                        </td>
+                        <td class="border-0 align-middle">
+                            @Html.DisplayFor(modelItem => item.Medicament.Price)
+                        </td>
+                        <td class="border-0 align-middle">
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                    </tr>
+                    total = total + (item.Medicament.Price * item.Quantity);
+                }
+
+            </tbody>
+        </table>
+        <form asp-page-handler="OrderOrder" method="post">
+            <div class="form-row">
+                <div class="col-9 ">
+                    <h5 class="font-weight-bold float-left">Total price is : $@total.ToString() </h5>
+                </div>
+                <div class="col-2 float-right">
+                    <select asp-for="Location" class="form-control " required="required"
+                            asp-items="@Model.pharmacies">
+                        <option value="">-- Select Pharmacy --</option>
+                    </select>
+                    <span asp-validation-for="Location" class="text-danger" />
+                </div>
+                <div class="col-1 ">
+                    <button type="submit" class="btn btn-primary float-right" name="id">Order</button>
+                </div>
+            </div>
+        </form>
+    }
+</div>
+
+
+
+
+

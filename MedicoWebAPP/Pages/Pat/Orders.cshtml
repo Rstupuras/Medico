@@ -1,0 +1,63 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Pat.OrdersModel
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Orders";
+}
+
+
+
+<div class="text-center ml-5 mr-5">
+    @if (Model.Orders.Count == 0)
+    {
+        <h1 class="display-4">There are no orders</h1>
+    }
+    else
+    {
+
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Order number
+                    </th>
+                    <th>
+                        Order Date
+                    </th>
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Orders)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+
+</div>
